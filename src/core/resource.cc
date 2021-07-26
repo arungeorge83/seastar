@@ -548,9 +548,9 @@ resources allocate(configuration c) {
         // Group orphan CPUs by ... some sane enough feature
         std::unordered_map<hwloc_obj_t, std::vector<unsigned>> grouped;
         hwloc_obj_type_t group_by[] = {
-            HWLOC_OBJ_L3CACHE,
-            HWLOC_OBJ_L2CACHE,
-            HWLOC_OBJ_L1CACHE,
+            //HWLOC_OBJ_L3CACHE,
+            //HWLOC_OBJ_L2CACHE,
+            //HWLOC_OBJ_L1CACHE,
             HWLOC_OBJ_PU,
         };
 
