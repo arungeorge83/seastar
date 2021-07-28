@@ -539,8 +539,12 @@ SEASTAR_TEST_CASE(test_file_ioctl) {
 
         // Issueing an FS ioctl which is applicable on regular files
         // and can be executed as normal user
-        BOOST_REQUIRE(!f.ioctl(FIGETBSZ, &block_size).get0());
-        BOOST_REQUIRE(block_size != 0);
+        try {
+            BOOST_REQUIRE(!f.ioctl(FIGETBSZ, &block_size).get0());
+            BOOST_REQUIRE(block_size != 0);
+        } catch (std::system_error& e) {
+            BOOST_REQUIRE_EQUAL(e.code().value(), EINVAL);
+        }
 
         // Perform invalid ops
         BOOST_REQUIRE_THROW(f.ioctl(FIGETBSZ, 0ul).get(), std::system_error);
