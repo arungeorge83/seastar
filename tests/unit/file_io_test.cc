@@ -553,13 +553,14 @@ SEASTAR_TEST_CASE(test_file_ioctl) {
         try {
             BOOST_REQUIRE(!f.ioctl(FIGETBSZ, &block_size).get0());
             BOOST_REQUIRE(block_size != 0);
+
+            // Use _short version and test the same
+            BOOST_REQUIRE(!f.ioctl_short(FIGETBSZ, &block_size).get0());
+            BOOST_REQUIRE(block_size != 0);
         } catch (std::system_error& e) {
+            // anon_bdev filesystems do not support FIGETBSZ, and return EINVAL
             BOOST_REQUIRE_EQUAL(e.code().value(), EINVAL);
         }
-
-        // Use _short version and test the same
-        BOOST_REQUIRE(!f.ioctl_short(FIGETBSZ, &block_size).get0());
-        BOOST_REQUIRE(block_size != 0);
 
         // Perform invalid ops
         BOOST_REQUIRE_THROW(f.ioctl(FIGETBSZ, 0ul).get(), std::system_error);
